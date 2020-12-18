@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\fabio.costa\\source\\repos\\Fireblocks\\Fireblocks\\Fireblocks.csproj": {}
+    "C:\\Users\\fabio.costa\\GitHub\\Fireblocks-API-dotnet\\Fireblocks\\Fireblocks.csproj": {}
   },
   "projects": {
-    "C:\\Users\\fabio.costa\\source\\repos\\Fireblocks\\Fireblocks\\Fireblocks.csproj": {
+    "C:\\Users\\fabio.costa\\GitHub\\Fireblocks-API-dotnet\\Fireblocks\\Fireblocks.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\fabio.costa\\source\\repos\\Fireblocks\\Fireblocks\\Fireblocks.csproj",
+        "projectUniqueName": "C:\\Users\\fabio.costa\\GitHub\\Fireblocks-API-dotnet\\Fireblocks\\Fireblocks.csproj",
         "projectName": "Fireblocks",
-        "projectPath": "C:\\Users\\fabio.costa\\source\\repos\\Fireblocks\\Fireblocks\\Fireblocks.csproj",
+        "projectPath": "C:\\Users\\fabio.costa\\GitHub\\Fireblocks-API-dotnet\\Fireblocks\\Fireblocks.csproj",
         "packagesPath": "C:\\Users\\fabio.costa\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\fabio.costa\\source\\repos\\Fireblocks\\Fireblocks\\obj\\",
+        "outputPath": "C:\\Users\\fabio.costa\\GitHub\\Fireblocks-API-dotnet\\Fireblocks\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"
@@ -22,7 +22,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "netstandard2.0"
+          "netstandard2.1"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -30,8 +30,8 @@
           "https://pkgs.dev.azure.com/transferoswiss/Transfero/_packaging/TransferoFeed/nuget/v3/index.json": {}
         },
         "frameworks": {
-          "netstandard2.0": {
-            "targetAlias": "netstandard2.0",
+          "netstandard2.1": {
+            "targetAlias": "netstandard2.1",
             "projectReferences": {}
           }
         },
@@ -42,12 +42,12 @@
         }
       },
       "frameworks": {
-        "netstandard2.0": {
-          "targetAlias": "netstandard2.0",
+        "netstandard2.1": {
+          "targetAlias": "netstandard2.1",
           "dependencies": {
-            "BouncyCastle": {
+            "Microsoft.AspNetCore.WebUtilities": {
               "target": "Package",
-              "version": "[1.8.6.1, )"
+              "version": "[2.2.0, )"
             },
             "Microsoft.Extensions.DependencyInjection.Abstractions": {
               "target": "Package",
@@ -61,12 +61,6 @@
               "target": "Package",
               "version": "[6.8.0, )"
             },
-            "NETStandard.Library": {
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[2.0.3, )",
-              "autoReferenced": true
-            },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[6.8.0, )"
@@ -74,10 +68,6 @@
             "System.Net.Http.Json": {
               "target": "Package",
               "version": "[5.0.0, )"
-            },
-            "jose-jwt": {
-              "target": "Package",
-              "version": "[3.0.0, )"
             }
           },
           "imports": [
@@ -90,6 +80,11 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "frameworkReferences": {
+            "NETStandard.Library": {
+              "privateAssets": "all"
+            }
+          },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.101\\RuntimeIdentifierGraph.json"
         }
       }

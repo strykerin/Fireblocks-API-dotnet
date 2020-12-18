@@ -47,14 +47,14 @@ namespace Fireblocks
 
         private void SetAuthenticationHeader(string path)
         {
-            string jwt = OAuthToken.CreateSignedToken(_apiKey, path, _privateKey);
-            bool removed = _httpClient.DefaultRequestHeaders.Remove("Bearer");
-            if (!removed)
-            {
-                throw new Exception("Header not found");
-            }
+            //string jwt = OAuthToken.CreateSignedToken(_apiKey, path, _privateKey);
+            //bool removed = _httpClient.DefaultRequestHeaders.Remove("Bearer");
+            //if (!removed)
+            //{
+            //    throw new Exception("Header not found");
+            //}
 
-            _httpClient.DefaultRequestHeaders.Add("Bearer", jwt);
+            //_httpClient.DefaultRequestHeaders.Add("Bearer", jwt);
         }
     }
 }
