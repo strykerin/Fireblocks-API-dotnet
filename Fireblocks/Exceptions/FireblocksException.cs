@@ -8,5 +8,8 @@ namespace Fireblocks.Exceptions
                                         : base (message, exception)
         {
         }
+        public FireblocksException(string message) : base (message)
+        {
+        }
     }
 }
