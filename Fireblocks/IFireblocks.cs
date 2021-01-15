@@ -13,5 +13,6 @@ namespace Fireblocks
         Task<CreateVaultAssetResponse> CreateNewWalletForVault(string vaultAccountId, string assetId, string EosAccountName = null);
         Task HideVaultFromWebConsoleView(string vaultAccountId);
         Task UnhideVaultFromWebConsoleView(string vaultAccountId);
+        Task<List<VaultWalletAddress>> GetAddressesOfVaultWallet(string vaultAccountId, string assetId, string eosAccountName = null);
     }
 }
