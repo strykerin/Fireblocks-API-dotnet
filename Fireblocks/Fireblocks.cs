@@ -1,9 +1,6 @@
-﻿using Fireblocks.Authentication;
-using Fireblocks.Exceptions;
+﻿using Fireblocks.Exceptions;
 using System.Threading.Tasks;
 using System;
-using System.Net.Http;
-using System.Net.Http.Json;
 using Fireblocks.Entities;
 using Fireblocks.Services;
 using System.Collections.Generic;
@@ -137,6 +134,23 @@ namespace Fireblocks
 
                 CreateVaultAssetResponse response = await _fireblocksClient.PostAsync<CreateVaultAssetResponse, CreateWalletForVault>(requestUri, createNewWalletForVault);
                 return response;
+            }
+            catch (Exception ex)
+            {
+                throw new FireblocksException(_messageErrorHttpClient, ex);
+            }
+        }
+
+        public async Task HideVaultFromWebConsoleView(string vaultAccountId)
+        {
+            if (string.IsNullOrEmpty(vaultAccountId))
+            {
+                throw new FireblocksException(_messageErrorInvalidInputParameters);
+            }
+            try
+            {
+                string requestUri = $"/v1/vault/accounts/{vaultAccountId}/hide";
+                await _fireblocksClient.GetAsync(requestUri);
             }
             catch (Exception ex)
             {
