@@ -2,6 +2,6 @@
 {
     public static class FireblocksParameters
     {
-        public const string BaseAddress = "https://api.fireblocks.io/v1/";
+        public const string BaseAddress = "https://api.fireblocks.io";
     }
 }
