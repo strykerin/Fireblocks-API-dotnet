@@ -79,10 +79,12 @@ namespace Fireblocks
         {
             if (string.IsNullOrEmpty(name))
             {
-                throw new ArgumentException(_messageErrorInvalidInputParameters);
+                throw new FireblocksException(_messageErrorInvalidInputParameters);
             }
             try
             {
+                string requestUri = "/v1/vault/accounts";
+
                 CreateVaultAccount createVaultAccount = new CreateVaultAccount
                 {
                     Name = name,
@@ -90,10 +92,51 @@ namespace Fireblocks
                     CustomerRefId = customerRefId,
                     AutoFuel = autoFuel
                 };
-                string requestUri = "/v1/vault/accounts";
-
                 VaultAccount vaultAccount = await _fireblocksClient.PostAsync<VaultAccount, CreateVaultAccount>(requestUri, createVaultAccount);
                 return vaultAccount;
+            }
+            catch (Exception ex)
+            {
+                throw new FireblocksException(_messageErrorHttpClient, ex);
+            }
+        }
+
+        public async Task<VaultAsset> GetVaultWallet(string vaultAccountId, string assetId)
+        {
+            if (string.IsNullOrEmpty(vaultAccountId) || string.IsNullOrEmpty(assetId))
+            {
+                throw new FireblocksException(_messageErrorInvalidInputParameters);
+            }
+            try
+            {
+                string requestUri = $"/v1/vault/accounts/{vaultAccountId}/{assetId}";
+
+                VaultAsset vaultAsset = await _fireblocksClient.GetAsync<VaultAsset>(requestUri);
+                return vaultAsset;
+            }
+            catch (Exception ex)
+            {
+                throw new FireblocksException(_messageErrorHttpClient, ex);
+            }
+        }
+
+        public async Task<CreateVaultAssetResponse> CreateNewWalletForVault(string vaultAccountId, string assetId, string EosAccountName = null)
+        {
+            if (string.IsNullOrEmpty(vaultAccountId) || string.IsNullOrEmpty(assetId))
+            {
+                throw new FireblocksException(_messageErrorInvalidInputParameters);
+            }
+            try
+            {
+                string requestUri = $"/v1/vault/accounts/{vaultAccountId}/{assetId}";
+
+                CreateWalletForVault createNewWalletForVault = new CreateWalletForVault
+                {
+                    EosAccountName = EosAccountName
+                };
+
+                CreateVaultAssetResponse response = await _fireblocksClient.PostAsync<CreateVaultAssetResponse, CreateWalletForVault>(requestUri, createNewWalletForVault);
+                return response;
             }
             catch (Exception ex)
             {
