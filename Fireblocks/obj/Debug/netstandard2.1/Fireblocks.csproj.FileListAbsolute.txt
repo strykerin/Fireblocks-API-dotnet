@@ -1,9 +1,0 @@
-C:\Users\fabio.costa\GitHub\Fireblocks-API-dotnet\Fireblocks\bin\Debug\netstandard2.1\Fireblocks.deps.json
-C:\Users\fabio.costa\GitHub\Fireblocks-API-dotnet\Fireblocks\bin\Debug\netstandard2.1\Fireblocks.dll
-C:\Users\fabio.costa\GitHub\Fireblocks-API-dotnet\Fireblocks\bin\Debug\netstandard2.1\Fireblocks.pdb
-C:\Users\fabio.costa\GitHub\Fireblocks-API-dotnet\Fireblocks\obj\Debug\netstandard2.1\Fireblocks.csprojAssemblyReference.cache
-C:\Users\fabio.costa\GitHub\Fireblocks-API-dotnet\Fireblocks\obj\Debug\netstandard2.1\Fireblocks.AssemblyInfoInputs.cache
-C:\Users\fabio.costa\GitHub\Fireblocks-API-dotnet\Fireblocks\obj\Debug\netstandard2.1\Fireblocks.AssemblyInfo.cs
-C:\Users\fabio.costa\GitHub\Fireblocks-API-dotnet\Fireblocks\obj\Debug\netstandard2.1\Fireblocks.csproj.CoreCompileInputs.cache
-C:\Users\fabio.costa\GitHub\Fireblocks-API-dotnet\Fireblocks\obj\Debug\netstandard2.1\Fireblocks.dll
-C:\Users\fabio.costa\GitHub\Fireblocks-API-dotnet\Fireblocks\obj\Debug\netstandard2.1\Fireblocks.pdb
