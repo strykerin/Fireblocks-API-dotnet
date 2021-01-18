@@ -1,80 +1,100 @@
-﻿using System.IO;
+﻿using Fireblocks.Utils;
+using System.Net.Http.Json;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Fireblocks.Authentication;
-using System.Text.Json;
-using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Net.Http.Headers;
 
 namespace Fireblocks.Services
 {
-    public class FireblocksClient
+    public class FireblocksClient : IFireblocksClient
     {
+        private const string _httpClientStatusCodeError = "Status code does not indicate success";
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
-        public FireblocksClient(HttpClient httpClient, string apiKey)
+        private readonly string _privateKey;
+        public FireblocksClient(HttpClient httpClient, string apiKey, string privateKey)
         {
             _httpClient = httpClient;
             _apiKey = apiKey;
+            _privateKey = privateKey;
         }
 
-        private void Authenticate()
+        public async Task<T> GetAsync<T>(string requestUri) where T : class
         {
-            //string jwt = 
-            _httpClient.DefaultRequestHeaders.Add("X-API-Key", _apiKey);
-            _httpClient.DefaultRequestHeaders.Add("Bearer", "");
+            this.Authenticate(requestUri);
+            T result = await _httpClient.GetFromJsonAsync<T>(requestUri);
+            return result;
         }
 
-        private string GenerateJWT()
+        public async Task GetAsync(string requestUri)
         {
-            Header header = new Header
+            this.Authenticate(requestUri);
+            HttpResponseMessage response = await _httpClient.GetAsync(requestUri);
+            if (!response.IsSuccessStatusCode)
             {
-                alg = "RS256",
-                typ = "JWT"
-            };
-            Payload payload = new Payload
-            {
-                nameId = "123",
-                nbf = 1608299468,
-                exp = 1608904268,
-                iat = 1608299468,
-                iss = "http://mysite.com",
-                aud = "http://myaudience.com"
-            };
-
-            byte[] bytesHeader = Encoding.UTF8.GetBytes(JsonSerializer.Serialize<Header>(header));
-            byte[] bytesPayload = Encoding.UTF8.GetBytes(JsonSerializer.Serialize<Payload>(payload));
-
-            string jwt = WebEncoders.Base64UrlEncode(bytesHeader) + "." + WebEncoders.Base64UrlEncode(bytesPayload);
-
-            string signature = SignJWT(jwt);
-            jwt = jwt + "." + signature;
-
-
-            return jwt;
-        }
-
-        private string SignJWT(string jwt)
-        {
-            string privateKey = File.ReadAllText(@"C:\Users\fabio.costa\Downloads\fireblocks.key");
-            byte[] privateKeyByte = Convert.FromBase64String(privateKey);
-
-            using (RSA rsa = RSA.Create())
-            {
-                rsa.ImportPkcs8PrivateKey(privateKeyByte, out _);
-                using (SHA256 sha256 = SHA256.Create())
-                {
-                    byte[] jwtHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(jwt));
-                    byte[] signature = rsa.SignHash(jwtHash, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
-                    RSAPKCS1SignatureFormatter rsaFormatter = new RSAPKCS1SignatureFormatter(rsa);
-                    rsaFormatter.SetHashAlgorithm("SHA256");
-                    byte[] signedHash = rsaFormatter.CreateSignature(jwtHash);
-                    return WebEncoders.Base64UrlEncode(signedHash);
-                }
+                throw new ArgumentException(_httpClientStatusCodeError);
             }
+            return;
+        }
+
+        public async Task<TReturn> PostAsync<TReturn, TBody>(string requestUri, TBody requestBody) where TReturn : class
+                                                                                                   where TBody : class
+        {
+            this.Authenticate(requestUri);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(requestUri, requestBody);
+
+            if (response.IsSuccessStatusCode)
+            {
+                TReturn result = await response.Content.ReadFromJsonAsync<TReturn>();
+                return result;
+            }
+            else
+            {
+                throw new ArgumentException(_httpClientStatusCodeError);
+            }
+        }
+
+        private void Authenticate(string requestUri)
+        {
+            string jwt = this.GenerateJWT(requestUri);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
+        }
+
+        private string GenerateJWT(string requestUri, string requestBody = "")
+        {
+            byte[] privateKeyByteArray = Convert.FromBase64String(_privateKey);
+            using RSA rsa = RSA.Create();
+            rsa.ImportPkcs8PrivateKey(privateKeyByteArray, out _);
+
+            var signingCredentials = new SigningCredentials(new RsaSecurityKey(rsa), SecurityAlgorithms.RsaSha256)
+            {
+                CryptoProviderFactory = new CryptoProviderFactory { CacheSignatureProviders = false }
+            };
+
+            DateTime now = DateTime.Now;
+            DateTimeOffset nowOffset = DateTimeOffset.Now;
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim("uri", requestUri),
+                    new Claim("nonce", nowOffset.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64),
+                    new Claim("sub", _apiKey),
+                    new Claim("bodyHash", CalculateHash.SHA256HashFunction(requestBody)),
+                }),
+                Expires = now.AddSeconds(55),
+                NotBefore = now,
+                SigningCredentials = signingCredentials
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
     }
 }
