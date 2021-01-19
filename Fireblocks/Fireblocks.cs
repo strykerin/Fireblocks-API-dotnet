@@ -4,6 +4,8 @@ using System;
 using Fireblocks.Entities;
 using Fireblocks.Services;
 using System.Collections.Generic;
+using System.Web;
+using System.Collections.Specialized;
 
 namespace Fireblocks
 {
@@ -246,9 +248,76 @@ namespace Fireblocks
         {
             try
             {
-                string requestUri = $"/v1/transactions";
+               string requestUri = $"/v1/transactions";
+                NameValueCollection query = HttpUtility.ParseQueryString(string.Empty);
+                if (!(before is null))
+                    query[$"{nameof(before)}"] = before;
+                if (!(after is null))
+                    query[$"{nameof(after)}"] = after;
+                if (!(status is null))
+                    query[$"{nameof(status)}"] = status;
+                if (!(orderBy is null))
+                    query[$"{nameof(orderBy)}"] = orderBy;
+                if (!(sourceType is null))
+                    query[$"{nameof(sourceType)}"] = sourceType;
+                if (!(sourceId is null))
+                    query[$"{nameof(sourceId)}"] = sourceId;
+                if (!(destType is null))
+                    query[$"{nameof(destType)}"] = destType;
+                if (!(destId is null))
+                    query[$"{nameof(destId)}"] = destId;
+                if (!(assets is null))
+                    query[$"{nameof(assets)}"] = assets;
+                if (!(txHash is null))
+                    query[$"{nameof(txHash)}"] = txHash;
+                if (!(limit is null))
+                    query[$"{nameof(limit)}"] = limit;
+
+                string queryString = query.ToString();
+                requestUri += queryString;
+
                 List<TransactionDetails> transactionsDetails = await _fireblocksClient.GetAsync<List<TransactionDetails>>(requestUri);
                 return transactionsDetails;
+            }
+            catch (Exception ex)
+            {
+                throw new FireblocksException(_messageErrorHttpClient, ex);
+            }
+        }
+
+        public async Task<CreateTransactionResponse> CreateTransaction(string assetId, TransferPeerPath source, DestinationTransferPeerPath destination, string amount, TransactionRequestDestination[] destinations, string fee = null, 
+                                            string gasPrice = null, string gasLimit = null, string networkFee = null, string feeLevel = null, string maxFee = null, bool? failOnLowFee = null, string note = null, 
+                                            bool? autoStaking = null, string networkStaking = null, string cpuStaking = null, TransactionOperation operation = null, string customerRefId = null, 
+                                            string replaceTxByHash = null, string extraParameters = null)
+        {
+            if (string.IsNullOrEmpty(assetId) || source is null || destination is null || string.IsNullOrEmpty(amount) || destinations is null)
+            {
+                throw new FireblocksException(_messageErrorInvalidInputParameters);
+            }
+            try
+            {
+                string requestUri = $"/v1/transactions";
+                CreateTransaction createTransaction = new CreateTransaction(assetId: assetId, source: source, destination: destination, amount: amount, destinations: destinations)
+                {
+                    Fee = fee,
+                    GasPrice = gasPrice,
+                    GasLimit = gasLimit,
+                    NetworkFee = networkFee,
+                    FeeLevel = feeLevel,
+                    MaxFee = maxFee,
+                    FailOnLowFee = failOnLowFee,
+                    Note = note,
+                    AutoStaking = autoStaking,
+                    NetworkStaking = networkStaking,
+                    CpuStaking = cpuStaking,
+                    Operation = operation,
+                    CustomerRefId = customerRefId,
+                    ReplaceTxByHash = replaceTxByHash,
+                    ExtraParameters = extraParameters
+                };
+
+                CreateTransactionResponse createTransactionResponse =  await _fireblocksClient.PostAsync<CreateTransactionResponse, CreateTransaction>(requestUri, createTransaction);
+                return createTransactionResponse;
             }
             catch (Exception ex)
             {
