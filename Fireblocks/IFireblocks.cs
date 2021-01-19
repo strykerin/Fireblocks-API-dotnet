@@ -116,5 +116,28 @@ namespace Fireblocks
                                                           string gasPrice = null, string gasLimit = null, string networkFee = null, string feeLevel = null, string maxFee = null, bool? failOnLowFee = null, string note = null,
                                                           bool? autoStaking = null, string networkStaking = null, string cpuStaking = null, TransactionOperation operation = null, string customerRefId = null,
                                                           string replaceTxByHash = null, string extraParameters = null);
+
+        /// <summary>
+        /// Retrieves a specific transaction for the requested transaction ID.
+        /// </summary>
+        /// <param name="txId">The ID of the transaction to return</param>
+        /// <returns></returns>
+        Task<TransactionDetails> GetTransactionById(string txId);
+
+        /// <summary>
+        /// Cancel the requested transaction.
+        /// </summary>
+        /// <param name="txId">The ID of the transaction to return</param>
+        /// <returns>Returns the status of the request.</returns>
+        Task<RequestStatus> CancelTransaction(string txId);
+
+        /// <summary>
+        /// Replaces Ethereum transactions that are stuck with 0 confirmation. This request creates a new transaction that can replace the stalled transaction, with the same source as the original one, with 0 ETH sent to itself. By using the same nonce as the original one, it will drop the original transaction once the new transaction will be mined.
+        /// A stuck transaction can be replaced by a different transaction using the create transaction endpoint and the "replaceTxByHash" field.
+        /// </summary>
+        /// <param name="txId">The ID of the transaction to return</param>
+        /// <param name="feeLevel">[optional] The requested fee level of the dropping transaction (LOW / MEDIUM / HIGH)</param>
+        /// <returns>Returns the transaction id of the replacing transaction.</returns>
+        Task<RequestStatus> DropTransaction(string txId, string feeLevel = null);
     }
 }

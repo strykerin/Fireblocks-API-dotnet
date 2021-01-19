@@ -65,9 +65,8 @@ namespace Fireblocks
             {
                 string requestUri = "/v1/vault/accounts";
 
-                CreateVaultAccount createVaultAccount = new CreateVaultAccount
+                CreateVaultAccount createVaultAccount = new CreateVaultAccount(name: name)
                 {
-                    Name = name,
                     HiddenOnUI = hiddenOnUI,
                     CustomerRefId = customerRefId,
                     AutoFuel = autoFuel
@@ -254,6 +253,65 @@ namespace Fireblocks
 
                 CreateTransactionResponse createTransactionResponse =  await _fireblocksClient.PostAsync<CreateTransactionResponse, CreateTransaction>(requestUri, createTransaction);
                 return createTransactionResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new FireblocksException(_messageErrorHttpClient, ex);
+            }
+        }
+
+        public async Task<TransactionDetails> GetTransactionById(string txId)
+        {
+            if (string.IsNullOrEmpty(txId))
+            {
+                throw new FireblocksException(_messageErrorInvalidInputParameters);
+            }
+            try
+            {
+                string requestUri = $"/v1/transactions/{txId}";
+                TransactionDetails transactionDetails = await _fireblocksClient.GetAsync<TransactionDetails>(requestUri);
+                return transactionDetails;
+            }
+            catch (Exception ex)
+            {
+                throw new FireblocksException(_messageErrorHttpClient, ex);
+            }
+        }
+
+        public async Task<RequestStatus> CancelTransaction(string txId)
+        {
+            if (string.IsNullOrEmpty(txId))
+            {
+                throw new FireblocksException(_messageErrorInvalidInputParameters);
+            }
+            try
+            {
+                string requestUri = $"/v1/transactions/{txId}";
+                RequestStatus requestStatus = await _fireblocksClient.PostAsync<RequestStatus>(requestUri);
+                return requestStatus;
+            }
+            catch (Exception ex)
+            {
+                throw new FireblocksException(_messageErrorHttpClient, ex);
+            }
+        }
+
+        public async Task<RequestStatus> DropTransaction(string txId, string feeLevel = null)
+        {
+            if (string.IsNullOrEmpty(txId))
+            {
+                throw new FireblocksException(_messageErrorInvalidInputParameters);
+            }
+            try
+            {
+                DropTransaction dropTransaction = new DropTransaction
+                {
+                    FeeLevel = feeLevel
+                };
+
+                string requestUri = $"/v1/transactions/{txId}";
+                RequestStatus requestStatus = await _fireblocksClient.PostAsync<RequestStatus, DropTransaction>(requestUri, dropTransaction);
+                return requestStatus;
             }
             catch (Exception ex)
             {
