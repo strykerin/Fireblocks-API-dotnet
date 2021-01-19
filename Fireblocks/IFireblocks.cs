@@ -157,5 +157,12 @@ namespace Fireblocks
         /// <param name="operation">[optional] Transaction operation type, the default is "TRANSFER"</param>
         /// <returns>Returns an EstimatedTransactionFeeResponse object.</returns>
         Task<EstimatedTransactionFeeResponse> EstimateTransactionFee(string assetId, string amount, TransferPeerPath source, DestinationTransferPeerPath destination = null, TransactionOperation operation = null);
+
+        /// <summary>
+        /// Fireblocks provides the Gas Station servce to fuel with ETH your Ethereum addresses with ERC20 tokens deposits.
+        /// Retrieves a term of a transfer ticket.
+        /// </summary>
+        /// <returns>Returns a GasStationInfo object.</returns>
+        Task<GasStationInfo> GasStationSettings();
     }
 }

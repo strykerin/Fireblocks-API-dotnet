@@ -359,5 +359,20 @@ namespace Fireblocks
                 throw new FireblocksException(_messageErrorHttpClient, ex);
             }
         }
+
+        public async Task<GasStationInfo> GasStationSettings()
+        {
+            try
+            {
+                string requestUri = $"/v1/gas_station";
+
+                GasStationInfo gasStationInfo = await _fireblocksClient.GetAsync<GasStationInfo>(requestUri);
+                return gasStationInfo;
+            }
+            catch (Exception ex)
+            {
+                throw new FireblocksException(_messageErrorHttpClient, ex);
+            }
+        }
     }
 }
