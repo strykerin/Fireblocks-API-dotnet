@@ -59,6 +59,22 @@ namespace Fireblocks.Services
             }
         }
 
+        public async Task<TReturn> PostAsync<TReturn>(string requestUri) where TReturn : class
+        {
+            this.Authenticate(requestUri);
+            HttpResponseMessage response = await _httpClient.PostAsync(requestUri, null);
+
+            if (response.IsSuccessStatusCode)
+            {
+                TReturn result = await response.Content.ReadFromJsonAsync<TReturn>();
+                return result;
+            }
+            else
+            {
+                throw new ArgumentException(_httpClientStatusCodeError);
+            }
+        }
+
         private void Authenticate(string requestUri)
         {
             string jwt = this.GenerateJWT(requestUri);
