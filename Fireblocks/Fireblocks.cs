@@ -374,5 +374,25 @@ namespace Fireblocks
                 throw new FireblocksException(_messageErrorHttpClient, ex);
             }
         }
+
+        //public Task<CallbackResponse> TransactionSigningCallbackHandler(string txId, string operation, string sourceType, string sourceId, string destType,
+        //                                                                string destAddressType, string destId, string asset, decimal amount, string amountStr,
+        //                                                                string destAddress, string fee = null, string extraParameters = null)
+        //{
+        //    if (string.IsNullOrEmpty(txId) || string.IsNullOrEmpty(operation) || string.IsNullOrEmpty(sourceType) || string.IsNullOrEmpty(sourceId) ||
+        //        string.IsNullOrEmpty(destType) || string.IsNullOrEmpty(destAddressType) || string.IsNullOrEmpty(destId) || string.IsNullOrEmpty(asset) ||
+        //        amount == 0 || string.IsNullOrEmpty(amountStr) || string.IsNullOrEmpty(destAddress))
+        //    {
+        //        throw new FireblocksException(_messageErrorInvalidInputParameters);
+        //    }
+        //    try
+        //    {
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw new FireblocksException(_messageErrorHttpClient, ex);
+        //    }
+        //}
     }
 }
