@@ -318,5 +318,46 @@ namespace Fireblocks
                 throw new FireblocksException(_messageErrorHttpClient, ex);
             }
         }
+
+        public async Task<NetworkFeeResponse> GetNetworkFee(string assetId)
+        {
+            if (string.IsNullOrEmpty(assetId))
+            {
+                throw new FireblocksException(_messageErrorInvalidInputParameters);
+            }
+            try
+            {
+                string requestUri = $"/v1/estimate_network_fee?assetId={assetId}";
+                NetworkFeeResponse networkFeeResponse = await _fireblocksClient.GetAsync<NetworkFeeResponse>(requestUri);
+                return networkFeeResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new FireblocksException(_messageErrorHttpClient, ex);
+            }
+        }
+
+        public async Task<EstimatedTransactionFeeResponse> EstimateTransactionFee(string assetId, string amount, TransferPeerPath source, DestinationTransferPeerPath destination = null, TransactionOperation operation = null)
+        {
+            if (string.IsNullOrEmpty(assetId) || string.IsNullOrEmpty(amount) || source is null)
+            {
+                throw new FireblocksException(_messageErrorInvalidInputParameters);
+            }
+            try
+            {
+                string requestUri = $"/v1/transactions/estimate_fee";
+                EstimatedTransactionFee estimatedTransactionFee = new EstimatedTransactionFee(assetId: assetId, amount: amount, source: source, destination: destination)
+                {
+                    Operation = operation
+                };
+
+                EstimatedTransactionFeeResponse estimatedTransactionFeeResponse = await _fireblocksClient.PostAsync<EstimatedTransactionFeeResponse, EstimatedTransactionFee>(requestUri, estimatedTransactionFee);
+                return estimatedTransactionFeeResponse;
+            }
+            catch (Exception ex)
+            {
+                throw new FireblocksException(_messageErrorHttpClient, ex);
+            }
+        }
     }
 }

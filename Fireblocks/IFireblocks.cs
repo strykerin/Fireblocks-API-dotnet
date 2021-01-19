@@ -139,5 +139,23 @@ namespace Fireblocks
         /// <param name="feeLevel">[optional] The requested fee level of the dropping transaction (LOW / MEDIUM / HIGH)</param>
         /// <returns>Returns the transaction id of the replacing transaction.</returns>
         Task<RequestStatus> DropTransaction(string txId, string feeLevel = null);
+
+        /// <summary>
+        /// Retrieves the current blockchain fees based on the requested asset.
+        /// </summary>
+        /// <param name="assetId">The asset for which you wish to retrieve the network fees</param>
+        /// <returns>Returns NetworkFee objects for low, medium and high fees.</returns>
+        Task<NetworkFeeResponse> GetNetworkFee(string assetId);
+
+        /// <summary>
+        /// Estimates the transaction fee for a given transaction request.
+        /// </summary>
+        /// <param name="assetId">The ID of the asset</param>
+        /// <param name="amount">The requested amount to transfer</param>
+        /// <param name="source">The source of the estimated transaction</param>
+        /// <param name="destination">The destination of the estimated transaction. For some blockchains it can affect the transaction fee.</param>
+        /// <param name="operation">[optional] Transaction operation type, the default is "TRANSFER"</param>
+        /// <returns>Returns an EstimatedTransactionFeeResponse object.</returns>
+        Task<EstimatedTransactionFeeResponse> EstimateTransactionFee(string assetId, string amount, TransferPeerPath source, DestinationTransferPeerPath destination = null, TransactionOperation operation = null);
     }
 }
