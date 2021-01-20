@@ -3,7 +3,7 @@ using System;
 
 namespace Fireblocks.Entities
 {
-    public abstract class WebhookRequestBody
+    public class WebhookRequestBody
     {
         public string Type { get; set; }
         public string TenantId { get; set; }
