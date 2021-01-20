@@ -8,16 +8,16 @@
         public Destination Destination { get; set; }
         public Amountinfo AmountInfo { get; set; }
         public Feeinfo FeeInfo { get; set; }
-        public int RequestedAmount { get; set; }
-        public int Amount { get; set; }
-        public int NetAmount { get; set; }
-        public int AmountUSD { get; set; }
-        public int ServiceFee { get; set; }
-        public int NetworkFee { get; set; }
-        public string CreatedAt { get; set; }
-        public string LastUpdated { get; set; }
         public string Status { get; set; }
         public string TxHash { get; set; }
+        public decimal RequestedAmount { get; set; }
+        public decimal Amount { get; set; }
+        public decimal NetAmount { get; set; }
+        public decimal? AmountUSD { get; set; }
+        public decimal ServiceFee { get; set; }
+        public decimal NetworkFee { get; set; }
+        public long CreatedAt { get; set; }
+        public long LastUpdated { get; set; }
         public string Tag { get; set; }
         public string SubStatus { get; set; }
         public string DestinationAddress { get; set; }
