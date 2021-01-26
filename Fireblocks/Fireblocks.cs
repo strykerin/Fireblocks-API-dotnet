@@ -55,7 +55,7 @@ namespace Fireblocks
             }
         }
 
-        public async Task<VaultAccount> CreateVault(string name, bool? hiddenOnUI = null, string customerRefId = null, bool? autoFuel = null)
+        public async Task<VaultAccount> CreateVault(string name, bool hiddenOnUI = false, string customerRefId = null, bool? autoFuel = null)
         {
             if (string.IsNullOrEmpty(name))
             {

@@ -2,6 +2,9 @@
 {
     public class VaultAsset
     {
+        /// <summary>
+        /// The ID of the asset
+        /// </summary>
         public string Id { get; set; }
         public string Total { get; set; }
         public string Balance { get; set; }

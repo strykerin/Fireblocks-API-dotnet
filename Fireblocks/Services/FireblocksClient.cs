@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System;
+using System.Text.Json;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -27,7 +28,10 @@ namespace Fireblocks.Services
         public async Task<T> GetAsync<T>(string requestUri) where T : class
         {
             this.Authenticate(requestUri);
-            T result = await _httpClient.GetFromJsonAsync<T>(requestUri);
+            HttpResponseMessage response = await _httpClient.GetAsync(requestUri);
+            //T result = await _httpClient.GetFromJsonAsync<T>(requestUri);
+            string mystring = await response.Content.ReadAsStringAsync();
+            T result = await response.Content.ReadFromJsonAsync<T>();
             return result;
         }
 
@@ -45,8 +49,11 @@ namespace Fireblocks.Services
         public async Task<TReturn> PostAsync<TReturn, TBody>(string requestUri, TBody requestBody) where TReturn : class
                                                                                                    where TBody : class
         {
-            this.Authenticate(requestUri);
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(requestUri, requestBody);
+            string requestBodyString = "{'name': 'pela string', 'hiddenOnUI': False}";
+            //string requestBodyString = JsonSerializer.Serialize(requestBody);
+            this.Authenticate(requestUri, requestBodyString);
+            object newRequestBody = new { Name= "pela string", HiddenOnUI= false};
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(requestUri, newRequestBody);
 
             if (response.IsSuccessStatusCode)
             {
@@ -75,9 +82,9 @@ namespace Fireblocks.Services
             }
         }
 
-        private void Authenticate(string requestUri)
+        private void Authenticate(string requestUri, string requestBody = "")
         {
-            string jwt = this.GenerateJWT(requestUri);
+            string jwt = this.GenerateJWT(requestUri, requestBody);
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
         }
 

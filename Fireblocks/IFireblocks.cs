@@ -29,7 +29,7 @@ namespace Fireblocks
         /// <param name="customerRefId">[optional] The ID for AML providers to associate the owner of funds with transactions</param>
         /// <param name="autoFuel">[optional] In case the Gas Station service is enabled on your workspace, this flag needs to be set to "true" if you wish to add this account's Ethereum address to be monitored and fueled upon detected deposits of ERC20 tokens.</param>
         /// <returns></returns>
-        Task<VaultAccount> CreateVault(string name, bool? hiddenOnUI = null, string customerRefId = null, bool? autoFuel = null);
+        Task<VaultAccount> CreateVault(string name, bool hiddenOnUI = false, string customerRefId = null, bool? autoFuel = null);
 
         /// <summary>
         /// Retrieves a wallet of a specific asset under a Fireblocks Vault Account.

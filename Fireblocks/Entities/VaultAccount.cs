@@ -4,6 +4,9 @@ namespace Fireblocks.Entities
 {
     public class VaultAccount
     {
+        /// <summary>
+        /// The ID of the Vault Account
+        /// </summary>
         public string Id { get; set; }
         public string Name { get; set; }
         public bool HiddenOnUI { get; set; }

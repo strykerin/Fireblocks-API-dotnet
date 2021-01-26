@@ -11,8 +11,7 @@ namespace Fireblocks.Entities
 
         public string Name { get; private set; }
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public bool? HiddenOnUI { get; set; }
+        public bool HiddenOnUI { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string CustomerRefId { get; set; }
